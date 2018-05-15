@@ -1,4 +1,6 @@
 #!flask/bin/python
+# -*- coding: UTF-8 -*-
+
 import imp
 from migrate.versioning import api
 from app import db
