@@ -20,6 +20,7 @@ class Conference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
     date = db.Column(db.DateTime, index=True)
+    # date = db.Column(db.String(64), index=True)
     place = db.Column(db.String(64), index=True)
     introduction = db.relationship('Introduction', backref='conference',  lazy='dynamic')
 
