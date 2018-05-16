@@ -9,13 +9,23 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.js" rel="stylesheet">
     <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
     <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
     <!--[if lt IE 9]>
       <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	  <style type="text/css">
+		  .table tbody tr td{
+            vertical-align: middle;
+			overflow: hidden;
+        }
+		  th{
+              text-align: center;
+        }
+
+	  </style>
   </head>
   <body>
   	<div class="container">
@@ -30,6 +40,7 @@
 		<ul class="nav nav-tabs">
 			<li role="presentation" id="/index"><a href="index">Home</a></li>
 			<li role="presentation" id="/add_conference"><a href="add_conference">发布会议</a></li>
+			<li role="presentation" id="/previewlist"><a href="previewlist">预览</a></li>
 			<li role="presentation"><a href="#">Others</a></li>
 			{% if tag %}
 			<!-- 获取当前页面路径，设置标签页active -->
@@ -44,9 +55,5 @@
 	</div>
 
 
-    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </body>
 </html>

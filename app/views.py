@@ -17,13 +17,27 @@ def index():
 @app.route('/add_conference', methods = ['GET', 'POST'])
 def add_conference():
     form = AddConferenceForm()
+    form = AddConferenceForm()
     user = {'username': 'HHX'}
     tag = {'name': 'add_conference'}
     if form.validate_on_submit():
         name = form.name.data
         date = form.date.data
         place = form.place.data
+
         conference = Conference(name=name, date=date, place=place)
         db.session.add(conference)
         db.session.commit()
     return render_template('add_conference.html', user=user, form=form, tag=tag)
+
+@app.route('/previewlist')
+def previewlist():
+    user = {'username': 'HHX'}
+    tag = {'name': 'previewlist'}
+    return render_template('previewlist.html', user=user, tag=tag)
+
+@app.route('/preview')
+def preview():
+    user = {'username': 'HHX'}
+    tag = {'name': 'preview'}
+    return render_template('preview.html', user=user, tag=tag)
