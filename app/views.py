@@ -6,7 +6,6 @@ from app.forms import AddConferenceForm
 from app.models import *
 
 
-@app.route('/')
 @app.route('/index')
 def index():
     user = { 'username': 'HHX'} # fake user
