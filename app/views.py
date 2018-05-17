@@ -33,17 +33,12 @@ def add_conference():
 def previewlist():
     user = {'username': 'HHX'}
     tag = {'name': 'previewlist'}
-    meetings = [{'name': 'xxx', '':''},
-                {}]# 列表，键值对，每个大括号是一个条目，调用的时候直接写meetings.键
+
     return render_template('previewlist.html', user=user, tag=tag)
 
 @app.route('/preview')
 def preview():
     user = {'username': 'HHX'}
     tag = {'name': 'preview'}
-    meeting = {
-        '':'',
-
-
-    }
+    
     return render_template('preview.html', user=user, tag=tag, )
