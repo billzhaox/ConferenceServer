@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 
 from flask import render_template
-
 from app import app
 from app.forms import AddConferenceForm
 from app.models import *
@@ -87,3 +86,8 @@ def preview():
         '备注信息': '我是备注'
     }
     return render_template('preview.html', user=user, tag=tag, meeting=meeting)
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html');

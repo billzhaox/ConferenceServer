@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-primary" align="center">
+			<div class="panel-heading">登录</div>
+			<div class="panel-body">
+				<form class="form-horizontal">
+				  <div class="form-group">
+				    <div class="col-sm-12">
+				      <input type="email" name="username" class="form-control" id="inputEmail" placeholder="Username">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-12">
+				      <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				  	
+				    <div class=" col-sm-3 col-sm-offset-2">
+				      <button type="submit" class="btn btn-primary">登录</button>
+				    </div>
+				    <div class=" col-sm-3 col-sm-offset-2">
+				      <button action="login.py" type="submit" class="btn btn-default">注册</button>
+				    </div>
+				    
+				  </div>
+				</form>
+			</div>
+		</div>
+
+		
+	</div>
+</div>
+
+{% endblock %}
