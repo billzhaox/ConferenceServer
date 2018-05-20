@@ -47,9 +47,15 @@ def previewlist():
     else:
         user = current_user
     tag = {'name': 'previewlist'}
+<<<<<<< HEAD
+    meetings = [{'name': 'xxx', '':''},
+                {}]# 列表，键值对，每个大括号是一个条目，调用的时候直接写meetings.键
+    return render_template('previewlist.html', user=user, tag=tag)
+=======
     conferences = Conference.query.all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
+>>>>>>> dsz
 
 @app.route('/preview')
 @login_required
@@ -59,6 +65,14 @@ def preview():
     else:
         user = current_user
     tag = {'name': 'preview'}
+<<<<<<< HEAD
+    meeting = {
+        '':'',
+
+
+    }
+    return render_template('preview.html', user=user, tag=tag, )
+=======
     conference = Conference.query.get(1)
     return render_template('preview.html', user=user, tag=tag, conference=conference)
 
@@ -110,3 +124,4 @@ def login():
 # def logout():
 #     logout_user()p
 #     return redirect(somewhere)
+>>>>>>> dsz
