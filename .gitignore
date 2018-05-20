@@ -1,0 +1,9 @@
+.idea
+app.db
+flask
+*.swp
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+Desktop.ini
