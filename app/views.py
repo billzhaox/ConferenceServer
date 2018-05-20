@@ -1,23 +1,32 @@
 # -*- coding: UTF-8 -*-
+from functools import wraps
+from urllib.parse import urlparse, urljoin
+from flask import render_template, redirect, url_for, flash, request, abort, session
+from flask_login import login_required, login_user, current_user
 
-from flask import render_template
-from app import app
-from app.forms import AddConferenceForm
+from app import app, login_manager
+from app.forms import *
 from app.models import *
 
 
 @app.route('/index')
 def index():
-    user = { 'username': 'HHX'} # fake user
     tag = {'name': 'index'}
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
     return render_template("index.html", user=user, tag=tag)
 
 
 @app.route('/add_conference', methods = ['GET', 'POST'])
+@login_required
 def add_conference():
     form = AddConferenceForm()
-    form = AddConferenceForm()
-    user = {'username': 'HHX'}
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
     tag = {'name': 'add_conference'}
     if form.validate_on_submit():
         name = form.name.data
@@ -31,63 +40,73 @@ def add_conference():
 
 
 @app.route('/previewlist')
+@login_required
 def previewlist():
-    user = {'username': 'HHX'}
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
     tag = {'name': 'previewlist'}
-    meetings = [
-        {
-            '会议名称': 'html加冕礼',
-            '会议地点': '行政办公楼三楼会议室',
-            '会议开始时间': '2018-5-16 15:30:00',
-            '会议时长': '3小时',
-            '会议状态': '待发布',
-            '会议嘉宾': '姜局，平行宇宙守护者，银河系元老级法师，凹凸曼带盐人，塞博坦星大祭司',
-            '详细内容': 'preview'
-        },
-        {
-            '会议名称': 'html加冕礼',
-            '会议地点': '行政办公楼三楼会议室',
-            '会议开始时间': '2018-5-16 15:30:00',
-            '会议时长': '3小时',
-            '会议状态': '待发布',
-            '会议嘉宾': '姜局，平行宇宙守护者，银河系元老级法师，凹凸曼带盐人，塞博坦星大祭司',
-            '详细内容': 'preview'
-        }, {
-            '会议名称': 'html加冕礼',
-            '会议地点': '行政办公楼三楼会议室',
-            '会议开始时间': '2018-5-16 15:30:00',
-            '会议时长': '3小时',
-            '会议状态': '待发布',
-            '会议嘉宾': '姜局，平行宇宙守护者，银河系元老级法师，凹凸曼带盐人，塞博坦星大祭司',
-            '详细内容': 'preview'
-        }
-    ]
-    return render_template('previewlist.html', user=user, tag=tag, meetings=meetings)
+    conferences = Conference.query.all()
+    return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
 
 @app.route('/preview')
+@login_required
 def preview():
-    user = {'username': 'HHX'}
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
     tag = {'name': 'preview'}
-    meeting = {
-        '会议名称': '我是名称!',
-        '会议简介': '海外网5月15日电韩联社15日称，韩国统一部表示，朝鲜共邀请韩国8名记者参观'
-                '丰溪里核试验场废弃仪式，包括4名通信社记者和4名电视台记者。他们将在朝鲜驻华'
-                '使馆获得签证后，22日从北京乘坐专机，与其他外国记者一道前往朝鲜元山葛麻机场，'
-                '并使用元山的宿舍和记者中心。其后，记者们将乘坐列车前往核试验场，结束摄影后再'
-                '返回元山记者中心。预计26日或27日从元山葛麻机场乘专机返回。记者的差旅费、通信'
-                '费等所有费用自行负担。',
-        '会议地点': '行政办公楼三楼会议室',
-        '会议时间': '2018-5-16 15:30:00',
-        '会议时长': '3小时',
-        '会议状态': '待发布',
-        '嘉宾介绍': '姜局，平行宇宙守护者，银河系元老级法师，凹凸曼带盐人，塞博坦星大祭司',
-        '参加人员': ['hhx', 'dsz', '...'],
-        '备注信息': '我是备注'
-    }
-    return render_template('preview.html', user=user, tag=tag, meeting=meeting)
+    conference = Conference.query.get(1)
+    return render_template('preview.html', user=user, tag=tag, conference=conference)
 
 
-@app.route('/login')
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
+
+
+# 登录验证装饰器
+def login_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if session.get('User'):  # 验证session
+            return func(*args, **kwargs)
+        else:
+            return redirect(url_for('admin.login'))
+    return decorated_function
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html');
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash("账号不存在")  # 操作提示信息，会在前端显示
+            return redirect(url_for('login'))
+        elif not user.check_pwd(password):
+            flash('密码输入错误，请重新输入！')
+            return redirect(url_for('login'))
+        session['user'] = username  # 匹配成功，添加session
+        login_user(user, form.remember_me.data)
+        return redirect(request.args.get('next') or url_for('index'))  # 重定向到首页
+    return render_template('login.html', form=form)
+
+
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     logout_user()p
+#     return redirect(somewhere)
