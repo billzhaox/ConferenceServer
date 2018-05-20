@@ -47,9 +47,14 @@ def previewlist():
     else:
         user = current_user
     tag = {'name': 'previewlist'}
+<<<<<<< HEAD
     conferences = Conference.query.all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
+=======
+
+    return render_template('previewlist.html', user=user, tag=tag)
+>>>>>>> ff580437753e3b124ffa3099c534ab5765849c07
 
 @app.route('/preview')
 @login_required
@@ -59,6 +64,7 @@ def preview():
     else:
         user = current_user
     tag = {'name': 'preview'}
+<<<<<<< HEAD
     conference = Conference.query.get(1)
     return render_template('preview.html', user=user, tag=tag, conference=conference)
 
@@ -110,3 +116,7 @@ def login():
 # def logout():
 #     logout_user()p
 #     return redirect(somewhere)
+=======
+    
+    return render_template('preview.html', user=user, tag=tag, )
+>>>>>>> ff580437753e3b124ffa3099c534ab5765849c07
